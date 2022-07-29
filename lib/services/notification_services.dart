@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class NotificationServices {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -16,8 +18,9 @@ class NotificationServices {
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
     final AndroidInitializationSettings androidInitializationSettingsIOS =
-        AndroidInitializationSettings('appicon');
-
+        AndroidInitializationSettings('mipmap/ic_launcher');
+    // var initializationSettingsAndroid =
+    //     AndroidInitializationSettings('mipmap/ic_launcher');
     final InitializationSettings initializationSettings =
         InitializationSettings(
       iOS: initializationSettingsIOS,
@@ -45,7 +48,21 @@ class NotificationServices {
       payload: 'Default_Sound',
     );
   }
-
+  scheduledNotification() async {
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        0,
+        'scheduled title',
+        'theme changes 5 seconds ago',
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+        )),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime);
+  }
   void requestIOSPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<

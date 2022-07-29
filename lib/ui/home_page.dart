@@ -1,6 +1,10 @@
+
+
 import 'package:example_todo_sqflite/services/theme_services.dart';
+import 'package:example_todo_sqflite/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../services/notification_services.dart';
 
@@ -16,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     notifyHelper = NotificationServices();
+    // notifyHelper.selectNotification('payload');
     notifyHelper.initializeNotification();
     notifyHelper.requestIOSPermissions();
     // TODO: implement initState
@@ -25,8 +30,33 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: _appBar(),
-      body: Text("Hello"),
+      body: Container(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        DateFormat.yMMMMd().format(
+                          DateTime.now(),
+                        ),
+                        style: subHeadingStyle,
+                      ),
+                      Text("Today"),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -36,20 +66,24 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           ThemeServices().updateTheme();
           notifyHelper.displayNotification(
-            title: "title",
+            title: "Message",
             body: Get.isDarkMode
-                ? "Activated Dark Theme"
-                : "Activated Light Theme.",
+                ? "Activated Light Theme."
+                : "Activated Dark Theme",
           );
+
+          notifyHelper.scheduledNotification();
         },
-        icon: Icon(Icons.nightlight_round),
+        icon: Icon(
+          Get.isDarkMode ? Icons.wb_sunny_rounded : Icons.nightlight_round,
+        ),
       ),
       actions: [
         IconButton(
           onPressed: () {
             ThemeServices().updateTheme();
           },
-          icon: Icon(Icons.person),
+          icon: CircleAvatar(),
         ),
       ],
     );
