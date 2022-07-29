@@ -1,14 +1,15 @@
+import 'package:example_todo_sqflite/ui/constants.dart';
 import 'package:flutter/material.dart';
 
 class Themes {
   // light theme
   static final light = ThemeData(
-    primaryColor: Colors.blue,
+    primaryColor: primaryClr,
     brightness: Brightness.light,
   );
   // dark theme
   static final dark = ThemeData(
-    primaryColor: Colors.yellow,
+    primaryColor: darkgreyClr,
     brightness: Brightness.dark,
   );
 }
