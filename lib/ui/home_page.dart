@@ -2,6 +2,7 @@
 
 import 'package:example_todo_sqflite/services/theme_services.dart';
 import 'package:example_todo_sqflite/themes.dart';
+import 'package:example_todo_sqflite/ui/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -48,7 +49,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                         style: subHeadingStyle,
                       ),
-                      Text("Today"),
+                      Text(
+                        "Today",
+                        style: headingStyle,
+                      ),
                     ],
                   ),
                 ),
@@ -62,6 +66,8 @@ class _HomePageState extends State<HomePage> {
 
   AppBar _appBar() {
     return AppBar(
+      elevation: 0,
+      backgroundColor: Get.isDarkMode ? darkgreyClr : Colors.white,
       leading: IconButton(
         onPressed: () {
           ThemeServices().updateTheme();
@@ -76,6 +82,7 @@ class _HomePageState extends State<HomePage> {
         },
         icon: Icon(
           Get.isDarkMode ? Icons.wb_sunny_rounded : Icons.nightlight_round,
+          color: Get.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
       actions: [
