@@ -1,0 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
+
+class DBHelper {
+  static Database? _db;
+  static final int _version = 1;
+  static final String _tableName = "tasks";
+  static Future<void> initDb() async {
+    if (_db != null) {
+      return;
+    }
+    try {
+      String _path = await getDatabasesPath() + "tasks.db";
+      _db = await openDatabase(_path, version: _version,
+          onCreate: (db, version) async {
+        print("creating a new one");
+        return await db.execute(
+            'CREATE TABLE $_tableName (id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, note TEXT,date STRING, start_time STRING,end_time STRING,remind INTEGER,repeat STRING,color INTEGER,is_completed INTEGER)');
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+}
