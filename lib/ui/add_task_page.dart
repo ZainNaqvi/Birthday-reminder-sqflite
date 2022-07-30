@@ -1,3 +1,5 @@
+import 'package:example_todo_sqflite/controllers/add_task_controller.dart';
+import 'package:example_todo_sqflite/models/task_model.dart';
 import 'package:example_todo_sqflite/themes.dart';
 import 'package:example_todo_sqflite/ui/constants.dart';
 import 'package:example_todo_sqflite/ui/widgets/button_dart.dart';
@@ -15,6 +17,7 @@ class AddTaskBar extends StatefulWidget {
 }
 
 class _AddTaskBarState extends State<AddTaskBar> {
+  TaskController _taskController = Get.put(TaskController());
   TextEditingController _userTitle = TextEditingController();
   TextEditingController _userNote = TextEditingController();
   DateTime? _selectedDate = DateTime.now();
@@ -230,8 +233,25 @@ class _AddTaskBarState extends State<AddTaskBar> {
         icon: Icon(Icons.warning_amber_outlined),
       );
     } else {
+      _addToDatabase();
       Get.back();
     }
+  }
+
+  _addToDatabase() async {
+    await _taskController.addTask(
+      task: UserTask(
+        title: _userTitle.text,
+        note: _userNote.text,
+        date: DateFormat.yMd().format(_selectedDate!),
+        startTime: _startTime,
+        endTime: _endTime,
+        remind: _selectRemind,
+        repeat: _selectRepeat,
+        color: _selectedIndex,
+        isCompleted: 0,
+      ),
+    );
   }
 
   _getUserDate(BuildContext context) async {

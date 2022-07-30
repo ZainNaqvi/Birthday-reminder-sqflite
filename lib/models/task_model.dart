@@ -11,6 +11,7 @@ class UserTask {
   String? repeat;
 
   UserTask(
+    {
     this.id,
     this.title,
     this.note,
@@ -21,12 +22,13 @@ class UserTask {
     this.remind,
     this.color,
     this.repeat,
+  }
   );
   UserTask.fromJson(Map<String, dynamic> json) {
-    id = json['id'] ?? '';
-    title = json['title'] ?? '';
-    note = json['note'] ?? '';
-    isCompleted = json['is_completed'] ?? '';
+    id = json['id'];
+    title = json['title'];
+    note = json['note'];
+    isCompleted = json['is_completed'];
     date = json['date'];
     startTime = json['start_time'];
     endTime = json['end_time'];
@@ -35,16 +37,18 @@ class UserTask {
     repeat = json['repeat'];
   }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "title": title,
-        "note": note,
-        'is_completed': isCompleted,
-        "date": date,
-        "start_time": startTime,
-        "end_time": endTime,
-        "remind": remind,
-        "color": color,
-        "repeat": repeat,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data["id"] = id;
+    data["title"] = title;
+    data["note"] = note;
+    data['is_completed'] = isCompleted;
+    data["date"] = date;
+    data["start_time"] = startTime;
+    data["end_time"] = endTime;
+    data["remind"] = remind;
+    data["color"] = color;
+    data["repeat"] = repeat;
+    return data;
+  }
 }
