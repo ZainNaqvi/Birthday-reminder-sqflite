@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:example_todo_sqflite/controllers/add_task_controller.dart';
 import 'package:example_todo_sqflite/models/task_model.dart';
@@ -25,7 +27,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TaskController _taskController = Get.put(TaskController());
-  var selectedDate = DateTime.now();
+  var _selectedDate = DateTime.now();
   late NotificationServices notifyHelper;
   @override
   void initState() {
@@ -67,24 +69,48 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, index) {
             print(
                 "list view builder has ${_taskController.taskList.length} items.");
-            return AnimationConfiguration.staggeredList(
-              position: index,
-              child: SlideAnimation(
-                child: FadeInAnimation(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          _showBottomSheet(
-                              context, _taskController.taskList[index]);
-                        },
-                        child: TaskTile(_taskController.taskList[index]),
-                      ),
-                    ],
+            UserTask task = _taskController.taskList[index];
+
+            if (task.repeat == 'Daily') {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, task);
+                          },
+                          child: TaskTile(task),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
+              );
+            }
+            if (task.date == DateFormat.yMd().format(_selectedDate)) {
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _showBottomSheet(context, task);
+                          },
+                          child: TaskTile(task),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            } else {
+              return Container();
+            }
           },
         );
       },
@@ -128,9 +154,7 @@ class _HomePageState extends State<HomePage> {
                         _taskController.updateTask(task.id!);
                         Get.back();
                       },
-                 
                       lable: 'Task Completed',
-                     
                     ),
               SizedBox(height: 8.h),
               _customButton(
@@ -140,18 +164,15 @@ class _HomePageState extends State<HomePage> {
                   _taskController.getTask();
                   Get.back();
                 },
-       
                 lable: 'Delete Task',
-           
               ),
               SizedBox(height: 8.h),
-              
+
               _customButton(
                 clr: Colors.transparent,
                 ontap: () {
                   Get.back();
                 },
-            
                 lable: 'Close',
                 isClose: true,
               ),
@@ -162,11 +183,9 @@ class _HomePageState extends State<HomePage> {
     ));
   }
 
- 
   _customButton({
     required Color clr,
     required VoidCallback ontap,
-   
     required String lable,
     bool isClose = false,
   }) {
@@ -234,7 +253,11 @@ class _HomePageState extends State<HomePage> {
             color: Colors.grey,
           ),
         ),
-        onDateChange: (date) => selectedDate = date,
+        onDateChange: (date) {
+          setState(() {
+            _selectedDate = date;
+          });
+        },
       ),
     );
   }
