@@ -15,6 +15,8 @@ class AddTaskBar extends StatefulWidget {
 
 class _AddTaskBarState extends State<AddTaskBar> {
   DateTime? _selectedDate = DateTime.now();
+  String _startTime = DateFormat('hh:mm a').format(DateTime.now()).toString();
+  String _endTime = "9:29 AM";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,9 +45,7 @@ class _AddTaskBarState extends State<AddTaskBar> {
                 hintText: DateFormat.yMd().format(_selectedDate!),
                 widget: IconButton(
                   onPressed: () async {
-                    setState(() {
-                      _selectedDate = _getUserDate(context);
-                    });
+                    _getUserDate(context);
                   },
                   icon: Icon(
                     Icons.calendar_today_outlined,
@@ -54,7 +54,33 @@ class _AddTaskBarState extends State<AddTaskBar> {
                 ),
               ),
               Row(
-                children: [],
+                children: [
+                  Expanded(
+                    child: MyTextField(
+                      hintText: _startTime,
+                      lable: "Start Time",
+                      widget: IconButton(
+                        icon: Icon(Icons.access_time_rounded),
+                        onPressed: () {
+                          _getUserTIme(isStarttime: true);
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 6.w),
+                  Expanded(
+                    child: MyTextField(
+                      hintText: _endTime,
+                      lable: "End Time",
+                      widget: IconButton(
+                        icon: Icon(Icons.access_time_rounded),
+                        onPressed: () {
+                          _getUserTIme(isStarttime: false);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -77,6 +103,33 @@ class _AddTaskBarState extends State<AddTaskBar> {
     } else {
       print("Value is null date is not pick by the user successfully.");
     }
+  }
+
+  _getUserTIme({required bool isStarttime}) async {
+    var userPickTime = await _showTimePicker();
+    String _formatedTime = userPickTime.format(context);
+    if (userPickTime == null) {
+      print("Time is not valid time cancelled");
+    } else if (isStarttime) {
+      setState(() {
+        _startTime = _formatedTime;
+      });
+    } else if (isStarttime == false) {
+      setState(() {
+        _endTime = _formatedTime;
+      });
+    }
+  }
+
+  _showTimePicker() {
+    return showTimePicker(
+      initialEntryMode: TimePickerEntryMode.input,
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.parse(_startTime.split(":")[0]),
+        minute: int.parse(_startTime.split(":")[1].split(" ")[0]),
+      ),
+    );
   }
 
   AppBar _appBar() {
