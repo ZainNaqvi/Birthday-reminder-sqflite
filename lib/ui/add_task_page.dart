@@ -17,6 +17,21 @@ class _AddTaskBarState extends State<AddTaskBar> {
   DateTime? _selectedDate = DateTime.now();
   String _startTime = DateFormat('hh:mm a').format(DateTime.now()).toString();
   String _endTime = "9:29 AM";
+  int _selectRemind = 5;
+  List<int> remindList = [
+    5,
+    10,
+    15,
+    20,
+  ];
+  String _selectRepeat = "None";
+  List<String> repeatList = [
+    "None",
+    "Daily",
+    "Weekly",
+    "Monthly",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +68,7 @@ class _AddTaskBarState extends State<AddTaskBar> {
                   ),
                 ),
               ),
+              // start time and the end time
               Row(
                 children: [
                   Expanded(
@@ -81,6 +97,48 @@ class _AddTaskBarState extends State<AddTaskBar> {
                     ),
                   ),
                 ],
+              ),
+              // remind the user
+              MyTextField(
+                hintText: "$_selectRemind minutes early",
+                lable: "Remind",
+                widget: DropdownButton(
+                    style: textHeadingStyle,
+                    iconSize: 32.sp,
+                    elevation: 4,
+                    underline: Container(height: 0.0),
+                    items:
+                        remindList.map<DropdownMenuItem<String>>((int value) {
+                      return DropdownMenuItem<String>(
+                        value: value.toString(),
+                        child: Text(value.toString()),
+                      );
+                    }).toList(),
+                    icon: Icon(Icons.keyboard_arrow_down, color: Colors.grey),
+                    onChanged: (String? value) => setState(() {
+                          _selectRemind = int.parse(value!);
+                        })),
+              ),
+              // remind repeat
+              MyTextField(
+                hintText: _selectRepeat,
+                lable: "Repeat",
+                widget: DropdownButton(
+                    style: textHeadingStyle,
+                    iconSize: 32.sp,
+                    elevation: 4,
+                    underline: Container(height: 0.0),
+                    items: repeatList
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value.toString(),
+                        child: Text(value.toString()),
+                      );
+                    }).toList(),
+                    icon: Icon(Icons.keyboard_arrow_down, color: Colors.grey),
+                    onChanged: (String? value) => setState(() {
+                          _selectRepeat = value!;
+                        })),
               ),
             ],
           ),
