@@ -1,5 +1,6 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:example_todo_sqflite/controllers/add_task_controller.dart';
+import 'package:example_todo_sqflite/models/task_model.dart';
 import 'package:example_todo_sqflite/services/theme_services.dart';
 import 'package:example_todo_sqflite/themes.dart';
 import 'package:example_todo_sqflite/ui/add_task_page.dart';
@@ -74,7 +75,8 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          _showBottomSheet();
+                          _showBottomSheet(
+                              context, _taskController.taskList[index]);
                         },
                         child: TaskTile(_taskController.taskList[index]),
                       ),
@@ -89,7 +91,130 @@ class _HomePageState extends State<HomePage> {
     ));
   }
 
-  _showBottomSheet() {}
+  _showBottomSheet(BuildContext context, UserTask task) {
+    Get.bottomSheet(BottomSheet(
+      onClosing: () {},
+      builder: (context) {
+        return customSheetStyle(
+          task: task,
+          color: Colors.blue,
+          context: context,
+          isCompleted: false,
+          lable: "Task Completed",
+          ontap: () {},
+        );
+      },
+    ));
+  }
+
+  Container customSheetStyle({
+    required UserTask task,
+    required String lable,
+    required Color color,
+    required Function()? ontap,
+    required bool isCompleted,
+    required BuildContext context,
+  }) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      height: isCompleted
+          ? MediaQuery.of(context).size.height * 0.32
+          : MediaQuery.of(context).size.height * 0.24,
+      decoration: BoxDecoration(
+        color: Get.isDarkMode ? darkgreyClr : Colors.white,
+      ),
+      child: Column(
+        children: [
+          // top heading line
+          Container(
+            margin: EdgeInsets.only(top: 1.0.r),
+            width: 120.w,
+            height: 4.h,
+            decoration: BoxDecoration(
+              color: Colors.grey[400],
+              borderRadius: BorderRadius.circular(14.r),
+            ),
+          ),
+          // custom Button
+          SizedBox(height: isCompleted ? 48.h : 34.h),
+          _customButton(
+            clr: bluishClr,
+            ontap: () {
+              Get.back();
+            },
+            isCompleted: isCompleted,
+            lable: 'Task Completed',
+            isClose: false,
+          ),
+          SizedBox(height: 8.h),
+          _customButton(
+            clr: pickClr,
+            ontap: () {
+              _taskController.delete(task: task);
+              _taskController.getTask();
+              Get.back();
+            },
+            isCompleted: isCompleted,
+            lable: 'Delete Task',
+            isClose: false,
+          ),
+          SizedBox(height: 8.h),
+          isCompleted
+              ? _customButton(
+                  clr: Colors.transparent,
+                  ontap: () {
+                    Get.back();
+                  },
+                  isCompleted: isCompleted,
+                  lable: 'Close',
+                  isClose: true,
+                )
+              : Container(height: 0.0),
+        ],
+      ),
+    );
+  }
+
+  _customButton({
+    required Color clr,
+    required VoidCallback ontap,
+    required bool isCompleted,
+    required String lable,
+    required bool isClose,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        ontap();
+      },
+      child: Container(
+        width: double.maxFinite,
+        height: 40.h,
+        decoration: BoxDecoration(
+          color: clr,
+          borderRadius: BorderRadius.circular(30.r),
+          border: Border.all(
+            width: 2,
+            color: isClose
+                ? Get.isDarkMode
+                    ? Colors.grey[600]!
+                    : Colors.grey[300]!
+                : clr,
+          ),
+        ),
+        child: Center(
+            child: isClose
+                ? Text(
+                    lable,
+                    style: textHeadingStyle,
+                  )
+                : Text(
+                    lable,
+                    style: textHeadingStyle.copyWith(color: Colors.white),
+                  )),
+      ),
+    );
+  }
+
   Container _appDateBar() {
     return Container(
       margin: EdgeInsets.only(left: 20.w, top: 20.h),
