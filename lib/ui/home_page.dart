@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
   AppBar _appBar() {
     return AppBar(
       elevation: 0,
-      backgroundColor: Get.isDarkMode ? darkgreyClr : Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       leading: IconButton(
         onPressed: () {
           ThemeServices().updateTheme();

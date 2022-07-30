@@ -15,6 +15,8 @@ class AddTaskBar extends StatefulWidget {
 }
 
 class _AddTaskBarState extends State<AddTaskBar> {
+  TextEditingController _userTitle = TextEditingController();
+  TextEditingController _userNote = TextEditingController();
   DateTime? _selectedDate = DateTime.now();
   String _startTime = DateFormat('hh:mm a').format(DateTime.now()).toString();
   String _endTime = "9:29 AM";
@@ -52,10 +54,12 @@ class _AddTaskBarState extends State<AddTaskBar> {
               MyTextField(
                 lable: "Title",
                 hintText: "Enter the title",
+                controller: _userTitle,
               ),
               MyTextField(
                 lable: "Note",
                 hintText: "Enter the note",
+                controller: _userNote,
               ),
               MyTextField(
                 lable: "Note",
@@ -147,13 +151,17 @@ class _AddTaskBarState extends State<AddTaskBar> {
               ),
 
               // select bottom color
-              SizedBox(height: 12.h),
+              SizedBox(height: 18.h),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _colorPallete(),
-                  MyButton(lable: "Create Task"),
+                  MyButton(
+                      lable: "Create Task",
+                      ontap: () {
+                        _validator();
+                      }),
                 ],
               ),
             ],
@@ -203,6 +211,27 @@ class _AddTaskBarState extends State<AddTaskBar> {
         ),
       ],
     );
+  }
+
+  _validator() {
+    if (_userTitle.text.isEmpty && _userNote.text.isEmpty) {
+      Get.snackbar(
+        "Message",
+        "All the fields are required.",
+        icon: Icon(
+          Icons.warning_amber_outlined,
+          color: Colors.amber,
+        ),
+      );
+    } else if (_userTitle.text.isEmpty || _userNote.text.isEmpty) {
+      Get.snackbar(
+        "Message",
+        "All the fields are requird.",
+        icon: Icon(Icons.warning_amber_outlined),
+      );
+    } else {
+      Get.back();
+    }
   }
 
   _getUserDate(BuildContext context) async {
