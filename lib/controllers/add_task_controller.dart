@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 class TaskController extends GetxController {
   @override
   void onReady() {
-
     super.onReady();
   }
 
@@ -20,5 +19,11 @@ class TaskController extends GetxController {
     print("read function is called");
     List<Map<String, dynamic?>>? tasks = await DBHelper.query();
     taskList.assignAll(tasks!.map((e) => UserTask.fromJson(e)).toList());
+  }
+
+// deleting the task using the specific id
+  Future<void> delete({required UserTask task}) async {
+    var id = await DBHelper.delete(task: task);
+    print(id);
   }
 }

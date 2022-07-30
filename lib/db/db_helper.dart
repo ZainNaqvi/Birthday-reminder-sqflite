@@ -36,4 +36,9 @@ class DBHelper {
     print("read function is called");
     return await _db?.query(_tableName);
   }
+  // delete Method
+  static Future<int?> delete({required UserTask task}) async {
+    print("delete function is called");
+    return await _db?.delete(_tableName, where: 'id=?', whereArgs: [task.id]);
+  }
 }

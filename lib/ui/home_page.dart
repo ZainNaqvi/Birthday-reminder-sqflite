@@ -1,11 +1,14 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:example_todo_sqflite/controllers/add_task_controller.dart';
 import 'package:example_todo_sqflite/services/theme_services.dart';
 import 'package:example_todo_sqflite/themes.dart';
 import 'package:example_todo_sqflite/ui/add_task_page.dart';
 import 'package:example_todo_sqflite/ui/constants.dart';
 import 'package:example_todo_sqflite/ui/widgets/button_dart.dart';
+import 'package:example_todo_sqflite/ui/widgets/task_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -20,6 +23,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TaskController _taskController = Get.put(TaskController());
   var selectedDate = DateTime.now();
   late NotificationServices notifyHelper;
   @override
@@ -44,13 +48,48 @@ class _HomePageState extends State<HomePage> {
             _appTaskBar(),
             // Date Picker TimeLines
             _appDateBar(),
+            SizedBox(height: 16.h),
             // list of the object user tasks
+            _showUserTasks(),
           ],
         ),
       ),
     );
   }
 
+  _showUserTasks() {
+    return Expanded(child: Obx(
+      () {
+        return ListView.builder(
+          shrinkWrap: true,
+          itemCount: _taskController.taskList.length,
+          itemBuilder: (context, index) {
+            print(
+                "list view builder has ${_taskController.taskList.length} items.");
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              child: SlideAnimation(
+                child: FadeInAnimation(
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          _showBottomSheet();
+                        },
+                        child: TaskTile(_taskController.taskList[index]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ));
+  }
+
+  _showBottomSheet() {}
   Container _appDateBar() {
     return Container(
       margin: EdgeInsets.only(left: 20.w, top: 20.h),
@@ -114,8 +153,9 @@ class _HomePageState extends State<HomePage> {
 // add-task-button
           MyButton(
             lable: "+ Add Task",
-            ontap: () {
-              Get.to(AddTaskBar());
+            ontap: () async {
+              await Get.to(AddTaskBar());
+              _taskController.getTask();
             },
           ),
         ],
