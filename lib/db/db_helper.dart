@@ -1,4 +1,6 @@
+import 'package:example_todo_sqflite/models/task_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DBHelper {
@@ -20,5 +22,18 @@ class DBHelper {
     } catch (e) {
       print(e);
     }
+  }
+
+
+  // insert Method
+  static Future<int> insert(UserTask? task) async {
+    print("insert function is called");
+    return await _db?.insert(_tableName, task!.toJson()) ?? 1;
+  }
+
+  // read Method
+  static Future<List<Map<String, Object?>>?> query() async {
+    print("read function is called");
+    return await _db?.query(_tableName);
   }
 }

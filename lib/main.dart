@@ -1,3 +1,4 @@
+import 'package:example_todo_sqflite/db/db_helper.dart';
 import 'package:example_todo_sqflite/services/theme_services.dart';
 import 'package:example_todo_sqflite/themes.dart';
 import 'package:example_todo_sqflite/ui/home_page.dart';
@@ -8,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DBHelper.initDb();
   await GetStorage.init();
   runApp(const MyApp());
 }
@@ -29,7 +31,6 @@ class MyApp extends StatelessWidget {
             themeMode: ThemeServices().theme,
             home: const HomePage(),
           );
-        }
-    );
+        });
   }
 }

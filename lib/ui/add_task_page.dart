@@ -239,7 +239,7 @@ class _AddTaskBarState extends State<AddTaskBar> {
   }
 
   _addToDatabase() async {
-    await _taskController.addTask(
+    var valueId = await _taskController.addTask(
       task: UserTask(
         title: _userTitle.text,
         note: _userNote.text,
@@ -252,6 +252,8 @@ class _AddTaskBarState extends State<AddTaskBar> {
         isCompleted: 0,
       ),
     );
+
+    print("My id is $valueId");
   }
 
   _getUserDate(BuildContext context) async {

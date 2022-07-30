@@ -40,9 +40,11 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         child: Column(
           children: [
+            // appbartask bar
             _appTaskBar(),
             // Date Picker TimeLines
             _appDateBar(),
+            // list of the object user tasks
           ],
         ),
       ),
