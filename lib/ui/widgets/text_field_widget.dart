@@ -39,6 +39,7 @@ class MyTextField extends StatelessWidget {
               ),
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: TextFormField(
@@ -59,7 +60,9 @@ class MyTextField extends StatelessWidget {
                   ),
                 ),
                 widget == null
-                    ? Container()
+                    ? Container(
+                        height: 0.0,
+                      )
                     : Container(
                         child: widget,
                       ),

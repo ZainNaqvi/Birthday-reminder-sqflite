@@ -1,5 +1,6 @@
 import 'package:example_todo_sqflite/themes.dart';
 import 'package:example_todo_sqflite/ui/constants.dart';
+import 'package:example_todo_sqflite/ui/widgets/button_dart.dart';
 import 'package:example_todo_sqflite/ui/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,13 +32,14 @@ class _AddTaskBarState extends State<AddTaskBar> {
     "Weekly",
     "Monthly",
   ];
-
+  int _selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: _appBar(),
       body: Container(
-        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 10.h),
+        padding: EdgeInsets.only(left: 18.w, right: 18.w, top: 10.h),
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
@@ -132,7 +134,10 @@ class _AddTaskBarState extends State<AddTaskBar> {
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value.toString(),
-                        child: Text(value.toString()),
+                        child: Text(
+                          value,
+                          style: TextStyle(color: Colors.grey),
+                        ),
                       );
                     }).toList(),
                     icon: Icon(Icons.keyboard_arrow_down, color: Colors.grey),
@@ -140,10 +145,63 @@ class _AddTaskBarState extends State<AddTaskBar> {
                           _selectRepeat = value!;
                         })),
               ),
+
+              // select bottom color
+              SizedBox(height: 12.h),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _colorPallete(),
+                  MyButton(lable: "Create Task"),
+                ],
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Column _colorPallete() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Color",
+          style: textHeadingStyle,
+        ),
+        SizedBox(height: 8.h),
+        Wrap(
+          children: List<Widget>.generate(
+              3,
+              (index) => GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedIndex = index;
+                      });
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 4.w),
+                      child: CircleAvatar(
+                        child: _selectedIndex == index
+                            ? Icon(
+                                Icons.done,
+                                color: Colors.white,
+                                size: 14.sp,
+                              )
+                            : Container(),
+                        backgroundColor: index == 0
+                            ? bluishClr
+                            : index == 1
+                                ? yellowClr
+                                : pickClr,
+                        radius: 14.r,
+                      ),
+                    ),
+                  )),
+        ),
+      ],
     );
   }
 
@@ -193,7 +251,7 @@ class _AddTaskBarState extends State<AddTaskBar> {
   AppBar _appBar() {
     return AppBar(
       elevation: 0,
-      backgroundColor: Get.isDarkMode ? darkgreyClr : Colors.white,
+      backgroundColor: Theme.of(context).backgroundColor,
       leading: IconButton(
         onPressed: () {
           Get.back();
