@@ -30,7 +30,7 @@ class MyTextField extends StatelessWidget {
           SizedBox(height: 6.h),
           Container(
             padding: EdgeInsets.only(left: 14.w, right: 14.w),
-            height: 42.h,
+            
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(

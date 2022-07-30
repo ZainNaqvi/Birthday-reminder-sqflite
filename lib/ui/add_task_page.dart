@@ -264,7 +264,10 @@ class _AddTaskBarState extends State<AddTaskBar> {
       actions: [
         IconButton(
           onPressed: () {},
-          icon: Icon(Icons.person),
+          icon: Icon(
+            Icons.person,
+            color: Get.isDarkMode ? Colors.white : Colors.grey,
+          ),
         ),
       ],
     );
