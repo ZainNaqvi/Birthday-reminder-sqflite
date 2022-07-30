@@ -24,7 +24,6 @@ class DBHelper {
     }
   }
 
-
   // insert Method
   static Future<int> insert(UserTask? task) async {
     print("insert function is called");
@@ -36,9 +35,20 @@ class DBHelper {
     print("read function is called");
     return await _db?.query(_tableName);
   }
+
   // delete Method
   static Future<int?> delete({required UserTask task}) async {
     print("delete function is called");
     return await _db?.delete(_tableName, where: 'id=?', whereArgs: [task.id]);
+  }
+
+  // update Method
+  static Future<int> update(int id) async {
+    print("update function is running");
+    return await _db!.rawUpdate('''
+UPDATE $_tableName SET is_completed=?
+where id  =?
+
+''', [1, id]);
   }
 }
