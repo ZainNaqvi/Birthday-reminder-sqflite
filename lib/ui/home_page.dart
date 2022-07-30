@@ -1,6 +1,7 @@
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:example_todo_sqflite/services/theme_services.dart';
 import 'package:example_todo_sqflite/themes.dart';
+import 'package:example_todo_sqflite/ui/add_task_page.dart';
 import 'package:example_todo_sqflite/ui/constants.dart';
 import 'package:example_todo_sqflite/ui/widgets/button_dart.dart';
 import 'package:flutter/material.dart';
@@ -109,7 +110,12 @@ class _HomePageState extends State<HomePage> {
           ),
 
 // add-task-button
-          MyButton(lable: "+ Add Task"),
+          MyButton(
+            lable: "+ Add Task",
+            ontap: () {
+              Get.to(AddTaskBar());
+            },
+          ),
         ],
       ),
     );
