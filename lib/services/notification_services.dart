@@ -52,16 +52,35 @@ class NotificationServices {
     );
   }
 
-  Future<void> scheduledNotification(int hours, int min, UserTask task) async {
-    int seconds = min;
+  // Future<void> scheduledNotification() async {
 
+  //   print("Scheduled Notificatin is trigger");
+  //   await flutterLocalNotificationsPlugin.zonedSchedule(
+  //     0,
+  //     'scheduled title',
+  //     'scheduled body',
+  //     // _currentTime(hours, min),
+  //     tz.TZDateTime.now(tz.local).add(Duration(seconds: 3)),
+  //     const NotificationDetails(
+  //         android: AndroidNotificationDetails(
+  //             'your channel id', 'your channel name',
+  //             channelDescription: 'your channel description')),
+  //     androidAllowWhileIdle: true,
+  //     uiLocalNotificationDateInterpretation:
+  //         UILocalNotificationDateInterpretation.absoluteTime,
+  //     matchDateTimeComponents: DateTimeComponents.time,
+  //   );
+  //   print("Scheduled Notificatin is trigger ending ");
+  // }
+
+  Future<void> scheduledNotification(int hours, int min, UserTask task) async {
     print("Scheduled Notificatin is trigger");
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       'scheduled title',
       'scheduled body',
       _currentTime(hours, min),
-      // tz.TZDateTime.now(tz.local).add(Duration(seconds: 1)),
+      // tz.TZDateTime.now(tz.local).add(Duration(seconds: min)),
       const NotificationDetails(
           android: AndroidNotificationDetails(
               'your channel id', 'your channel name',
@@ -75,13 +94,18 @@ class NotificationServices {
   }
 
   tz.TZDateTime _currentTime(int hour, int min) {
+    print("_cutternt time funciotn is ruunning ");
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate =
         tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, min);
 
     if (scheduledDate.isBefore(now)) {
+      print("schedule data condition ");
       scheduledDate = scheduledDate.add(const Duration(days: 1));
+
     }
+    print("_cutternt time funciotn is ending  ");
+
     return scheduledDate;
   }
 
@@ -89,6 +113,7 @@ class NotificationServices {
     tz.initializeTimeZones();
     final String currentTimeZone =
         await FlutterNativeTimezone.getLocalTimezone();
+    print("My current time zone is $currentTimeZone");
     tz.setLocalLocation(tz.getLocation(currentTimeZone));
   }
 

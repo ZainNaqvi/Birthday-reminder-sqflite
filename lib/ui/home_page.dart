@@ -1,5 +1,3 @@
-
-
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:example_todo_sqflite/controllers/add_task_controller.dart';
 import 'package:example_todo_sqflite/models/task_model.dart';
@@ -70,16 +68,18 @@ class _HomePageState extends State<HomePage> {
             print(
                 "list view builder has ${_taskController.taskList.length} items.");
             UserTask task = _taskController.taskList[index];
-
+            print(task.toJson());
             if (task.repeat == 'Daily') {
               DateTime date = DateFormat.jm().parse(task.startTime.toString());
-
+          
               var myTime = DateFormat('HH:mm').format(date);
+              print(myTime);
               notifyHelper.scheduledNotification(
                 int.parse(myTime.split(":")[0]),
                 int.parse(myTime.split(":")[1]),
                 task,
               );
+
               return AnimationConfiguration.staggeredList(
                 position: index,
                 child: SlideAnimation(
@@ -135,8 +135,7 @@ class _HomePageState extends State<HomePage> {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
           height: task.isCompleted == 0
-              ? MediaQuery.of(context).size.height * 0.32
-              : MediaQuery.of(context).size.height * 0.24,
+              ? 210.h : 170.h,
           decoration: BoxDecoration(
             color: Get.isDarkMode ? darkgreyClr : Colors.white,
           ),
@@ -330,7 +329,9 @@ class _HomePageState extends State<HomePage> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            // notifyHelper.scheduledNotification();
+          },
           icon: CircleAvatar(),
         ),
       ],
