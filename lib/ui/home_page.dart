@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
             _appTaskBar(),
             // Date Picker TimeLines
             _appDateBar(),
-            SizedBox(height: 16.h),
+            SizedBox(height: 22.h),
             // list of the object user tasks
             _showUserTasks(),
           ],
@@ -63,6 +63,7 @@ class _HomePageState extends State<HomePage> {
     return Expanded(child: Obx(
       () {
         return ListView.builder(
+          physics: BouncingScrollPhysics(),
           shrinkWrap: true,
           itemCount: _taskController.taskList.length,
           itemBuilder: (context, index) {
@@ -330,9 +331,11 @@ class _HomePageState extends State<HomePage> {
       actions: [
         IconButton(
           onPressed: () {
-            // notifyHelper.scheduledNotification();
+            Get.snackbar("Message", "HI! 😎");
           },
-          icon: CircleAvatar(),
+          icon: CircleAvatar(
+            backgroundImage: AssetImage("images/profile.jpg"),
+          ),
         ),
       ],
     );
