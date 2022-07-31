@@ -304,7 +304,7 @@ class _HomePageState extends State<HomePage> {
       elevation: 0,
       backgroundColor: Theme.of(context).backgroundColor,
       leading: IconButton(
-        onPressed: () {
+        onPressed: () async {
           ThemeServices().updateTheme();
           notifyHelper.displayNotification(
             title: "Message",
@@ -313,7 +313,7 @@ class _HomePageState extends State<HomePage> {
                 : "Activated Dark Theme",
           );
 
-          notifyHelper.scheduledNotification();
+          await notifyHelper.scheduledNotification();
         },
         icon: Icon(
           Get.isDarkMode ? Icons.wb_sunny_rounded : Icons.nightlight_round,

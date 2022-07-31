@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationServices {
+
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin(); //
 
   initializeNotification() async {
+
     //tz.initializeTimeZones();
     final IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
@@ -18,7 +20,7 @@ class NotificationServices {
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
     final AndroidInitializationSettings androidInitializationSettingsIOS =
-        AndroidInitializationSettings('mipmap/ic_launcher');
+        AndroidInitializationSettings('app_icon');
     // var initializationSettingsAndroid =
     //     AndroidInitializationSettings('mipmap/ic_launcher');
     final InitializationSettings initializationSettings =
@@ -48,21 +50,26 @@ class NotificationServices {
       payload: 'Default_Sound',
     );
   }
-  scheduledNotification() async {
+
+  Future<void> scheduledNotification() async {
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('America/Detroit'));
+    print("Scheduled Notificatin is trigger");
     await flutterLocalNotificationsPlugin.zonedSchedule(
         0,
         'scheduled title',
-        'theme changes 5 seconds ago',
+        'scheduled body',
         tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
         const NotificationDetails(
             android: AndroidNotificationDetails(
-          'your channel id',
-          'your channel name',
-        )),
+                'your channel id', 'your channel name',
+                channelDescription: 'your channel description')),
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime);
+    print("Scheduled Notificatin is trigger ending ");
   }
+
   void requestIOSPermissions() {
     flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
