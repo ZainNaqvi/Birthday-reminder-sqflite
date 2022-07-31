@@ -167,6 +167,7 @@ class _AddTaskBarState extends State<AddTaskBar> {
                       }),
                 ],
               ),
+              SizedBox(height: 16.h),
             ],
           ),
         ),

@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
     // notifyHelper.selectNotification('payload');
     notifyHelper.initializeNotification();
     notifyHelper.requestIOSPermissions();
+    _taskController.getTask();
     // TODO: implement initState
     super.initState();
   }
@@ -71,7 +72,7 @@ class _HomePageState extends State<HomePage> {
             print(task.toJson());
             if (task.repeat == 'Daily') {
               DateTime date = DateFormat.jm().parse(task.startTime.toString());
-          
+
               var myTime = DateFormat('HH:mm').format(date);
               print(myTime);
               notifyHelper.scheduledNotification(
@@ -134,8 +135,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context) {
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 12.w),
-          height: task.isCompleted == 0
-              ? 210.h : 170.h,
+          height: task.isCompleted == 0 ? 210.h : 170.h,
           decoration: BoxDecoration(
             color: Get.isDarkMode ? darkgreyClr : Colors.white,
           ),
