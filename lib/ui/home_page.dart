@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:example_todo_sqflite/controllers/add_task_controller.dart';
@@ -72,6 +72,14 @@ class _HomePageState extends State<HomePage> {
             UserTask task = _taskController.taskList[index];
 
             if (task.repeat == 'Daily') {
+              DateTime date = DateFormat.jm().parse(task.startTime.toString());
+
+              var myTime = DateFormat('HH:mm').format(date);
+              notifyHelper.scheduledNotification(
+                int.parse(myTime.split(":")[0]),
+                int.parse(myTime.split(":")[1]),
+                task,
+              );
               return AnimationConfiguration.staggeredList(
                 position: index,
                 child: SlideAnimation(
@@ -313,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                 : "Activated Dark Theme",
           );
 
-          await notifyHelper.scheduledNotification();
+          // await notifyHelper.scheduledNotification();
         },
         icon: Icon(
           Get.isDarkMode ? Icons.wb_sunny_rounded : Icons.nightlight_round,
