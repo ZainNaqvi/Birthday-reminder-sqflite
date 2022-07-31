@@ -34,7 +34,7 @@ class MyTextField extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(
-                color: Colors.grey[300]!,
+                color: Colors.grey[500]!,
                 width: 1.0,
               ),
             ),
@@ -45,7 +45,7 @@ class MyTextField extends StatelessWidget {
                   child: TextFormField(
                     readOnly: widget == null ? false : true,
                     cursorColor:
-                        Get.isDarkMode ? Colors.grey[100] : Colors.grey[600],
+                        Get.isDarkMode ? Colors.grey[100] : Colors.grey[800],
                     autofocus: false,
                     autocorrect: true,
                     controller: controller,

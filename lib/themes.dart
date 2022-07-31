@@ -54,7 +54,7 @@ TextStyle get textInputStyle {
   return (GoogleFonts.lato(
     textStyle: TextStyle(
       fontSize: 16.sp,
-      color: Get.isDarkMode ? Colors.grey[100] : Colors.grey[600],
+      color: Get.isDarkMode ? Colors.grey[100] : Colors.grey[800],
       fontWeight: FontWeight.w500,
     ),
   ));
