@@ -22,7 +22,7 @@ class NotificationServices {
             onDidReceiveLocalNotification: onDidReceiveLocalNotification);
 
     final AndroidInitializationSettings androidInitializationSettingsIOS =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     // var initializationSettingsAndroid =
     //     AndroidInitializationSettings('mipmap/ic_launcher');
     final InitializationSettings initializationSettings =
