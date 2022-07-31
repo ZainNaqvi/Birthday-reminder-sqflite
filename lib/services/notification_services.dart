@@ -1,4 +1,5 @@
 import 'package:example_todo_sqflite/models/task_model.dart';
+import 'package:example_todo_sqflite/ui/notified_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -48,7 +49,7 @@ class NotificationServices {
       title,
       body,
       platformChannelSpecifics,
-      payload: 'Default_Sound',
+      payload: title,
     );
   }
 
@@ -76,20 +77,20 @@ class NotificationServices {
   Future<void> scheduledNotification(int hours, int min, UserTask task) async {
     print("Scheduled Notificatin is trigger");
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
-      'scheduled title',
-      'scheduled body',
-      _currentTime(hours, min),
-      // tz.TZDateTime.now(tz.local).add(Duration(seconds: min)),
-      const NotificationDetails(
-          android: AndroidNotificationDetails(
-              'your channel id', 'your channel name',
-              channelDescription: 'your channel description')),
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
-    );
+        task.id!.toInt(),
+        task.title,
+        task.note,
+        _currentTime(hours, min),
+        // tz.TZDateTime.now(tz.local).add(Duration(seconds: min)),
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+                'your channel id', 'your channel name',
+                channelDescription: 'your channel description')),
+        androidAllowWhileIdle: true,
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
+        payload: "${task.title}|${task.note}");
     print("Scheduled Notificatin is trigger ending ");
   }
 
@@ -102,7 +103,6 @@ class NotificationServices {
     if (scheduledDate.isBefore(now)) {
       print("schedule data condition ");
       scheduledDate = scheduledDate.add(const Duration(days: 1));
-
     }
     print("_cutternt time funciotn is ending  ");
 
@@ -134,7 +134,11 @@ class NotificationServices {
     } else {
       print("Notification Done");
     }
-    Get.to(() => Container());
+    if (payload == "Message") {
+      print("Nothing to navigate ");
+    } else {
+      Get.to(() => NotifiedPage(lable: payload!));
+    }
   }
 
   Future onDidReceiveLocalNotification(
