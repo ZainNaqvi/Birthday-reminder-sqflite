@@ -45,7 +45,8 @@ dependencies:
   date_picker_timeline: ^1.2.3
   flutter_staggered_animations: ^1.0.0
   flutter_native_timezone: ^2.0.0
-
+  hive:
+  hive_flutter:
 dev_dependencies:
   flutter_test:
     sdk: flutter

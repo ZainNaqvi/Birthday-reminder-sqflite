@@ -12,12 +12,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
 import '../services/notification_services.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final box;
+  final darkMode;
+  const HomePage({Key? key, required this.box, required this.darkMode})
+      : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -311,23 +315,17 @@ class _HomePageState extends State<HomePage> {
     return AppBar(
       elevation: 0,
       backgroundColor: Theme.of(context).backgroundColor,
-      leading: IconButton(
-        onPressed: () async {
-          ThemeServices().updateTheme();
-          notifyHelper.displayNotification(
-            title: "Message",
-            body: Get.isDarkMode
-                ? "Activated Light Theme."
-                : "Activated Dark Theme",
-          );
+      leading: Switch(
+        value: widget.darkMode,
+        onChanged: (value) {
+          widget.box.put('darkmode', value);
+        },
+      ),
 
           // await notifyHelper.scheduledNotification();
-        },
-        icon: Icon(
-          Get.isDarkMode ? Icons.wb_sunny_rounded : Icons.nightlight_round,
-          color: Get.isDarkMode ? Colors.white : Colors.black,
-        ),
-      ),
+        
+       
+      
       actions: [
         IconButton(
           onPressed: () {
